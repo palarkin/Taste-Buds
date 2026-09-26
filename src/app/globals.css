@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@theme {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), Georgia, serif;
+
+  /* root beer palette */
+  --color-foam: #fdf8f1;
+  --color-cream: #f6ead8;
+  --color-crema: #ecd9bd;
+  --color-sassafras: #c8742b;
+  --color-sassafras-dark: #a55a1c;
+  --color-brew: #6b3a1f;
+  --color-brew-dark: #3f2213;
+  --color-ink: #24160d;
+
+  --animate-sheet-in: sheet-in 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-pop-in: pop-in 200ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  --animate-fade-in: fade-in 200ms ease-out;
+
+  @keyframes sheet-in {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-foam);
+  color: var(--color-ink);
+}
+
+/* shared form controls */
+@utility input {
+  @apply w-full rounded-xl border border-crema bg-white px-3 py-2.5 text-base text-ink shadow-sm outline-none placeholder:text-stone-400 focus:border-sassafras focus:ring-2 focus:ring-sassafras/25;
+}
+@utility label {
+  @apply mb-1 block text-sm font-medium text-brew;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+}
+@utility btn-primary {
+  @apply btn bg-brew text-foam shadow-sm hover:bg-brew-dark;
+}
+@utility btn-secondary {
+  @apply btn border border-crema bg-white text-brew hover:bg-cream;
+}
+@utility btn-ghost {
+  @apply btn text-brew hover:bg-cream;
+}
+@utility btn-danger {
+  @apply btn border border-red-200 bg-white text-red-700 hover:bg-red-50;
+}
+@utility card {
+  @apply rounded-2xl border border-crema/80 bg-white shadow-[0_1px_2px_rgba(63,34,19,0.06)];
+}
+
+/* range slider for ratings */
+input[type="range"].rating-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #b91c1c 0%, #ea580c 25%, #f59e0b 50%, #65a30d 75%, #059669 100%);
+}
+input[type="range"].rating-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: white;
+  border: 3px solid var(--color-brew);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+input[type="range"].rating-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: white;
+  border: 3px solid var(--color-brew);
+}
