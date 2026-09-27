@@ -30,7 +30,9 @@ export async function importVerifiedBreweries(userId: string): Promise<BreweryIm
       if (row) rootBeerIds.push(row.id);
     }
     const checked = new Date(`${b.evidence.checkedOn}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-    const note = `Brews its own root beer. Root beer is listed on the brewery's website (checked ${checked}): ${b.evidence.url}\nCall ahead to confirm it's pouring.`;
+    // Only breweries with a root beer of their own in the catalog are described as brewing it; the rest serve one.
+    const lead = b.rootBeers.length ? "Brews its own root beer. Root beer is listed" : "Serves root beer. It's listed";
+    const note = `${lead} on the brewery's website (checked ${checked}): ${b.evidence.url}\nCall ahead to confirm it's pouring.`;
 
     for (const loc of b.locations) {
       result.total++;

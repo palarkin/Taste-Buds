@@ -80,8 +80,8 @@ export default async function SettingsPage() {
           <NameListImport enabled={user.isAdmin} />
           <CatalogSourceRow
             source="breweries"
-            title="Breweries with their own root beer"
-            detail={`${VERIFIED_BREWERIES.length} breweries (${VERIFIED_BREWERIES.reduce((n, b) => n + b.locations.length, 0)} locations) confirmed two ways: they make a root beer in our catalog, and their own website mentions root beer. Adds them to the map, skipping any already there.`}
+            title="Breweries that serve root beer"
+            detail={`${VERIFIED_BREWERIES.length} breweries (${VERIFIED_BREWERIES.reduce((n, b) => n + b.locations.length, 0)} locations) where the brewery's own website lists root beer on its menu or taps, checked by hand (hard root beers and root beer stouts don't count). Adds them to the map, skipping any already there.`}
             credit="Addresses from Open Brewery DB (openbrewerydb.org)"
             count={sources.breweryPins}
             unit="brewery pins on map"
