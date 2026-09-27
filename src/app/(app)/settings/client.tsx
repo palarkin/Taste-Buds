@@ -5,7 +5,7 @@ import { useActionState, useState, useTransition } from "react";
 import { addMember, setAdmin, setShareRatings, updateMember } from "@/actions/auth";
 import { Switch } from "@/components/filter-sheet";
 import { eraseAllData, loadDemoData } from "@/actions/demo";
-import { runCommunityMapImport, runOpenFoodFactsImport, runRetailerSync, runRootBeerBarrelImport } from "@/actions/catalog-sources";
+import { runBreweryImport, runCommunityMapImport, runOpenFoodFactsImport, runRetailerSync, runRootBeerBarrelImport } from "@/actions/catalog-sources";
 import { Loader2 } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 
@@ -120,7 +120,7 @@ export function CatalogSourceRow({
   canSync,
   status = null,
 }: {
-  source: "openfoodfacts" | "rootbeerbarrel" | "communitymap" | "retailers";
+  source: "openfoodfacts" | "rootbeerbarrel" | "communitymap" | "retailers" | "breweries";
   title: string;
   detail: string;
   credit: string;
@@ -146,6 +146,15 @@ export function CatalogSourceRow({
         onClick={() =>
           start(async () => {
             setMessage(null);
+            if (source === "breweries") {
+              const res = await runBreweryImport();
+              if ("error" in res && res.error) setMessage(res.error);
+              else if ("result" in res && res.result) {
+                const r = res.result;
+                setMessage(`${r.added} brewery pins added · ${r.alreadyOnMap} already on the map · ${r.rootBeersLinked} root beers linked to pins`);
+              }
+              return;
+            }
             if (source === "retailers") {
               const res = await runRetailerSync();
               if ("error" in res && res.error) setMessage(res.error);

@@ -98,3 +98,15 @@ export async function addRootBeerListItems(items: z.input<typeof listItem>[]) {
   revalidatePath("/", "layout");
   return { result };
 }
+
+export async function runBreweryImport() {
+  const user = await assertAdmin();
+  const { importVerifiedBreweries } = await import("@/lib/catalog-import/breweries");
+  try {
+    const result = await importVerifiedBreweries(user.id);
+    revalidatePath("/", "layout");
+    return { result };
+  } catch (e) {
+    return { error: `Brewery import failed: ${(e as Error).message}` };
+  }
+}

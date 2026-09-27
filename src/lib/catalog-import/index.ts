@@ -270,12 +270,14 @@ export async function catalogSourceCounts() {
   const [{ n: barcodes }] = await db.select({ n: count() }).from(schema.rootBeerBarcodes);
   const [{ n: communityPins }] = await db.select({ n: count() }).from(schema.locations).where(sql`${schema.locations.externalId} LIKE 'rbmap:%'`);
   const [{ n: allPlaces }] = await db.select({ n: count() }).from(schema.locations);
+  const [{ n: breweryPins }] = await db.select({ n: count() }).from(schema.locations).where(sql`${schema.locations.externalId} LIKE 'obdb:%'`);
   const [{ n: dismissedPins }] = await db.select({ n: count() }).from(schema.locationTombstones);
   return {
     bySource: Object.fromEntries(rows.map((r) => [r.source, r.n])) as Record<string, number>,
     barcodes,
     communityPins,
-    clubPlaces: allPlaces - communityPins,
+    breweryPins,
+    clubPlaces: allPlaces - communityPins - breweryPins,
     dismissedPins,
   };
 }

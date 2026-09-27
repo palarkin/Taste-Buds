@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/ui";
 import { AddMemberForm, CatalogSourceRow, DangerZone, MemberRow, PrivacyCard } from "./client";
 import { NameListImport } from "./name-lists";
 import { catalogSourceCounts, lastSync } from "@/lib/catalog-import";
+import { VERIFIED_BREWERIES } from "@/lib/catalog-import/breweries";
 import { formatDate } from "@/lib/format";
 
 export const metadata = { title: "Settings" };
@@ -77,6 +78,15 @@ export default async function SettingsPage() {
             status={retailSync ? (retailSync.status === "failed" ? `Last sync failed ${formatDate(retailSync.startedAt)}: ${retailSync.error}` : `Last synced ${formatDate(retailSync.startedAt)}${retailSync.by ? ` by ${retailSync.by}` : ""}`) : null}
           />
           <NameListImport enabled={user.isAdmin} />
+          <CatalogSourceRow
+            source="breweries"
+            title="Breweries with their own root beer"
+            detail={`${VERIFIED_BREWERIES.length} breweries (${VERIFIED_BREWERIES.reduce((n, b) => n + b.locations.length, 0)} locations) confirmed two ways: they make a root beer in our catalog, and their own website mentions root beer. Adds them to the map, skipping any already there.`}
+            credit="Addresses from Open Brewery DB (openbrewerydb.org)"
+            count={sources.breweryPins}
+            unit="brewery pins on map"
+            canSync={user.isAdmin}
+          />
           <CatalogSourceRow
             source="communitymap"
             title="Community Root Beer Map"

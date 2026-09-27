@@ -1,0 +1,229 @@
+[
+ {
+  "brand": "Clouds Brewing",
+  "rootBeers": [
+   {
+    "brand": "Clouds Brewing",
+    "name": "Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "https://www.cloudsbrewing.com/menu",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "eaed88bf-4da0-43bc-bf43-4ed6299752a3",
+    "name": "Clouds Brewing",
+    "street": "1233 Front St Ste E",
+    "city": "Raleigh",
+    "state": "North Carolina",
+    "postal": "27609-7534",
+    "lat": 35.8215929,
+    "lng": -78.6140103,
+    "website": "http://www.cloudsbrewing.com"
+   },
+   {
+    "obdbId": "f5d75c6d-8d8a-439c-92f9-73edb3574aba",
+    "name": "Clouds Brewing",
+    "street": "905 W Main St",
+    "city": "Durham",
+    "state": "North Carolina",
+    "postal": "27701",
+    "lat": 36.0000041,
+    "lng": -78.9104658,
+    "website": "http://www.cloudsbrewing.com"
+   }
+  ]
+ },
+ {
+  "brand": "Diamond Bear Brewing",
+  "rootBeers": [
+   {
+    "brand": "Diamond Bear Brewing",
+    "name": "Big Rock Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "https://diamondbear.com/our-beers/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "83e2f163-0cbf-4473-8edd-48456837a603",
+    "name": "Diamond Bear Brewing Co",
+    "street": "600 N Broadway St",
+    "city": "North Little Rock",
+    "state": "Arkansas",
+    "postal": "72114-5381",
+    "lat": 34.75942775,
+    "lng": -92.27268921,
+    "website": "http://www.diamondbear.com"
+   }
+  ]
+ },
+ {
+  "brand": "Etna Brewing Co.",
+  "rootBeers": [
+   {
+    "brand": "Etna Brewing Co.",
+    "name": "Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "http://www.etnabrewing.com/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "7a824a71-6925-4710-bea9-2231cecc634b",
+    "name": "Etna Brewing Co LLC",
+    "street": "131 Callahan Street",
+    "city": "Etna",
+    "state": "California",
+    "postal": "96027",
+    "lat": 41.45674141,
+    "lng": -122.8918305,
+    "website": "http://www.etnabrew.com"
+   }
+  ]
+ },
+ {
+  "brand": "Grand Teton Brewing Co",
+  "rootBeers": [
+   {
+    "brand": "Grand Teton Brewing Co",
+    "name": "Root Beer"
+   },
+   {
+    "brand": "Grand Teton Brewing Co",
+    "name": "Old Faithful Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "https://grandtetonbrewing.com/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "34038638-e24e-425e-b7b3-fcaeaa4e088d",
+    "name": "Grand Teton Brewing Co",
+    "street": "430 Old Jackson Hwy",
+    "city": "Victor",
+    "state": "Idaho",
+    "postal": "83455-5500",
+    "lat": 43.593522,
+    "lng": -111.10507,
+    "website": "http://grandtetonbrewing.com"
+   }
+  ]
+ },
+ {
+  "brand": "Lift Bridge Brewery",
+  "rootBeers": [
+   {
+    "brand": "Lift Bridge Brewery",
+    "name": "Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "https://www.liftbridgebrewery.com/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "63051dfb-b101-4b2a-9393-b70d089f1381",
+    "name": "Lift Bridge Brewery",
+    "street": "1900 Tower Dr W",
+    "city": "Stillwater",
+    "state": "Minnesota",
+    "postal": "55082-7515",
+    "lat": 45.0391054,
+    "lng": -92.8317848,
+    "website": "http://www.liftbridgebrewery.com"
+   }
+  ]
+ },
+ {
+  "brand": "Potosi Brewery",
+  "rootBeers": [
+   {
+    "brand": "Potosi Brewery",
+    "name": "Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "https://potosibrewery.com/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "dfa14d71-6c4f-4a62-9a73-907af8f4ed16",
+    "name": "Potosi Brewing Co",
+    "street": "209 S Main St",
+    "city": "Potosi",
+    "state": "Wisconsin",
+    "postal": "53820-9675",
+    "lat": 42.6755069,
+    "lng": -90.72487192,
+    "website": "http://www.potosibrewery.com"
+   }
+  ]
+ },
+ {
+  "brand": "Public Coast Brewing Co.",
+  "rootBeers": [
+   {
+    "brand": "Public Coast Brewing Co.",
+    "name": "Stephen's Root Beer"
+   }
+  ],
+  "evidence": {
+   "url": "https://publiccoastbrewing.com/beer/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "23009018-e5ab-4747-bd83-04665b226ea0",
+    "name": "Public Coast Brewing",
+    "street": "264 E 3rd Ave",
+    "city": "Cannon Beach",
+    "state": "Oregon",
+    "postal": "97110-2008",
+    "lat": 45.90084068,
+    "lng": -123.9590737,
+    "website": "http://www.publiccoastbrewing.com"
+   }
+  ]
+ },
+ {
+  "brand": "Sprecher Brewing Company",
+  "rootBeers": [
+   {
+    "brand": "Sprecher Brewing Company",
+    "name": "Amber Bottles Sprechen Sie Deutsch Wisconsin"
+   },
+   {
+    "brand": "Sprecher Brewing Company",
+    "name": "Maple"
+   }
+  ],
+  "evidence": {
+   "url": "https://sprecherbrewery.com/",
+   "checkedOn": "2026-09-27"
+  },
+  "locations": [
+   {
+    "obdbId": "79572eef-8de1-40ed-a2d2-19e8ecb77f6f",
+    "name": "Sprecher Brewing Co / Chameleon Brewing",
+    "street": "701 W Glendale Ave",
+    "city": "Glendale",
+    "state": "Wisconsin",
+    "postal": "53209-6509",
+    "lat": 43.09929865,
+    "lng": -87.91969511,
+    "website": "http://www.sprecherbrewery.com"
+   }
+  ]
+ }
+]
