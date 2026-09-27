@@ -9,7 +9,8 @@ import * as schema from "./schema";
 export const LOCAL_DATABASE_URL = "postgres://tastebuds:tastebuds@localhost:54329/tastebuds";
 
 function create() {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL ?? LOCAL_DATABASE_URL, max: process.env.VERCEL ? 3 : 10 });
+  const url = process.env.DATABASE_URL || process.env.POSTGRES_URL || LOCAL_DATABASE_URL;
+  const pool = new Pool({ connectionString: url, max: process.env.VERCEL ? 3 : 10 });
   return drizzle(pool, { schema });
 }
 

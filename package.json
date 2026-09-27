@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "dev:next": "next dev",
-    "vercel-build": "drizzle-kit migrate && next build"
+    "vercel-build": "node scripts/migrate.mjs && next build"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",
