@@ -53,4 +53,15 @@ export async function deleteFile(url: string) {
   await unlink(path.join(UPLOAD_DIR, name)).catch(() => {});
 }
 
+/**
+ * Where photos go, checked on every request (not baked in at build time, so connecting a Blob store
+ * takes effect without a rebuild): straight to Vercel Blob, to local disk in development,
+ * or nowhere on Vercel when no Blob store is connected (its disk is read-only).
+ */
+export type UploadMode = "blob" | "local" | "none";
+export function uploadMode(): UploadMode {
+  if (process.env.BLOB_READ_WRITE_TOKEN) return "blob";
+  return process.env.VERCEL ? "none" : "local";
+}
+
 export const MIME_BY_EXT = Object.fromEntries(Object.entries(EXT).map(([m, e]) => [e, m]));

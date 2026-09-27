@@ -4,6 +4,7 @@ import { getTasting } from "@/lib/queries";
 import { displayName } from "@/lib/normalize";
 import { PageHeader } from "@/components/ui";
 import { TastingForm } from "@/components/tasting-form";
+import { uploadMode } from "@/lib/storage";
 
 export const metadata = { title: "Edit entry" };
 
@@ -19,6 +20,7 @@ export default async function EditTastingPage(props: PageProps<"/log/[id]/edit">
     <div className="mx-auto max-w-2xl">
       <PageHeader title={`Edit: ${displayName(t.rootBeer)}`} />
       <TastingForm
+        uploads={uploadMode()}
         mode="edit"
         tastingId={t.tasting.id}
         initial={{

@@ -8,6 +8,9 @@ import { kindOf, putFile } from "@/lib/storage";
 // Local upload endpoint. Handoff: replace with Vercel Blob client uploads (handleUpload),
 // inserting the media row in onUploadCompleted.
 export async function POST(request: Request) {
+  if (process.env.VERCEL) {
+    return NextResponse.json({ error: "Photo storage isn't connected. An admin needs to connect a Vercel Blob store to this project." }, { status: 503 });
+  }
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
 

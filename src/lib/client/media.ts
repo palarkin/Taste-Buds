@@ -4,8 +4,6 @@
 // On Vercel, uploads go straight from the browser to Vercel Blob; locally they go to /api/upload.
 import { recordUploadedMedia } from "@/actions/tastings";
 
-const USE_BLOB = process.env.NEXT_PUBLIC_UPLOADS === "blob";
-
 export type PreparedFile = { file: File; takenAt: Date | null; previewUrl: string; kind: "image" | "video" };
 
 const MAX_EDGE = 2400;
@@ -38,15 +36,19 @@ async function downscale(file: File): Promise<File> {
   }
 }
 
-export async function prepareFile(file: File): Promise<PreparedFile> {
+const TYPE_BY_EXT: Record<string, string> = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp", gif: "image/gif", heic: "image/heic", heif: "image/heif", mp4: "video/mp4", mov: "video/quicktime", webm: "video/webm" };
+
+export async function prepareFile(original: File): Promise<PreparedFile> {
+  const ext = original.name.split(".").pop()?.toLowerCase() ?? "";
+  const file = original.type ? original : new File([original], original.name, { type: TYPE_BY_EXT[ext] ?? "image/jpeg", lastModified: original.lastModified });
   const kind = file.type.startsWith("video/") ? "video" : "image";
   const takenAt = kind === "image" ? await readTakenAt(file) : file.lastModified ? new Date(file.lastModified) : null;
   const ready = kind === "image" ? await downscale(file) : file;
   return { file: ready, takenAt, previewUrl: URL.createObjectURL(ready), kind };
 }
 
-export async function uploadMedia(tastingId: string, p: PreparedFile, onProgress?: (fraction: number) => void) {
-  if (USE_BLOB) {
+export async function uploadMedia(tastingId: string, p: PreparedFile, mode: "blob" | "local", onProgress?: (fraction: number) => void) {
+  if (mode === "blob") {
     const { upload } = await import("@vercel/blob/client");
     const ext = p.file.name.split(".").pop()?.toLowerCase() || (p.kind === "video" ? "mp4" : "jpg");
     const blob = await upload(`tastings/${tastingId}/${p.kind}.${ext}`, p.file, {

@@ -15,6 +15,8 @@ type ExistingMedia = { id: string; url: string; kind: "image" | "video" };
 
 export type TastingFormProps = {
   mode: "new" | "edit";
+  // Where photos go (decided on the server): Vercel Blob, local disk, or nowhere if storage isn't connected.
+  uploads: "blob" | "local" | "none";
   tastingId?: string;
   initial?: {
     rootBeer: PickedRootBeer;
@@ -89,15 +91,28 @@ export function TastingForm(props: TastingFormProps) {
       return;
     }
     const id = (res as { id: string }).id;
-    try {
+    if (props.uploads !== "none") {
+      // Each photo leaves the list once it's safely stored, so "Save" again only retries the ones that failed.
+      const failed: PreparedFile[] = [];
+      let firstError = "";
       for (let i = 0; i < pendingFiles.length; i++) {
-        await uploadMedia(id, pendingFiles[i], (f) => setProgress((p) => ({ ...p, [i]: f })));
+        try {
+          await uploadMedia(id, pendingFiles[i], props.uploads, (f) => setProgress((p) => ({ ...p, [i]: f })));
+        } catch (e) {
+          failed.push(pendingFiles[i]);
+          firstError ||= (e as Error).message;
+        }
       }
-    } catch (e) {
-      setError(`Saved, but an upload failed: ${(e as Error).message}`);
-      setSaving(false);
-      router.refresh();
-      return;
+      if (failed.length) {
+        setPendingFiles(failed);
+        setProgress({});
+        setError(
+          `Your rating was saved, but ${failed.length === 1 ? "1 photo" : `${failed.length} photos`} didn't upload (${firstError}). They're still here: tap Save to try again.`,
+        );
+        setSaving(false);
+        router.refresh();
+        return;
+      }
     }
     router.push(`/log/${id}`);
     router.refresh();
@@ -245,6 +260,11 @@ export function TastingForm(props: TastingFormProps) {
             </div>
           ))}
         </div>
+        {props.uploads === "none" ? (
+          <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+            Photo storage isn&apos;t connected yet, so photos can&apos;t be saved. An admin needs to connect a Vercel Blob store to this project.
+          </p>
+        ) : (
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" className="btn-secondary" onClick={() => cameraRef.current?.click()}>
             <Camera className="h-4 w-4" /> Take photo / video
@@ -255,6 +275,7 @@ export function TastingForm(props: TastingFormProps) {
           <input ref={cameraRef} type="file" accept="image/*,video/*" capture="environment" className="hidden" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
           <input ref={libraryRef} type="file" accept="image/*,video/*" multiple className="hidden" onChange={(e) => { addFiles(e.target.files); e.target.value = ""; }} />
         </div>
+        )}
         <p className="mt-2 text-xs text-stone-500">Photos up to 15 MB (large ones are shrunk automatically). Videos up to 50 MB (about 30 seconds).</p>
       </section>
 
