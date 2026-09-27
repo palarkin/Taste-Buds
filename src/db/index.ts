@@ -8,8 +8,13 @@ import * as schema from "./schema";
 // On Vercel: DATABASE_URL comes from the Neon integration. See HANDOFF.md.
 export const LOCAL_DATABASE_URL = "postgres://tastebuds:tastebuds@localhost:54329/tastebuds";
 
+/** Neon URLs use sslmode=require; spell out verify-full (what pg does today) so future pg versions keep it strict. */
+function strictSsl(url: string) {
+  return url.replace(/([?&])sslmode=(require|prefer|verify-ca)\b/, "$1sslmode=verify-full");
+}
+
 function create() {
-  const url = process.env.DATABASE_URL || process.env.POSTGRES_URL || LOCAL_DATABASE_URL;
+  const url = strictSsl(process.env.DATABASE_URL || process.env.POSTGRES_URL || LOCAL_DATABASE_URL);
   const pool = new Pool({ connectionString: url, max: process.env.VERCEL ? 3 : 10 });
   return drizzle(pool, { schema });
 }

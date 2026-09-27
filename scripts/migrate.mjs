@@ -4,11 +4,13 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 
 // Neon's Vercel integration names these DATABASE_URL* or POSTGRES_URL* depending on setup.
-const url =
+const raw =
   process.env.DATABASE_URL_UNPOOLED ||
   process.env.POSTGRES_URL_NON_POOLING ||
   process.env.DATABASE_URL ||
   process.env.POSTGRES_URL;
+// Same as src/db/index.ts: keep certificate verification strict across pg versions.
+const url = raw?.replace(/([?&])sslmode=(require|prefer|verify-ca)\b/, "$1sslmode=verify-full");
 
 if (!url) {
   console.error(
