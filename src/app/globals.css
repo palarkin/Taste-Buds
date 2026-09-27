@@ -64,6 +64,22 @@ body {
 @utility input {
   @apply w-full rounded-xl border border-crema bg-white px-3 py-2.5 text-base text-ink shadow-sm outline-none placeholder:text-stone-400 focus:border-sassafras focus:ring-2 focus:ring-sassafras/25;
 }
+/* iPhone Safari gives date fields a built-in minimum width and their own height, so side by side
+   they spill into the next field and don't line up. Make them size like every other field. */
+input[type="date"].input,
+input[type="time"].input {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  height: 2.875rem; /* same as a text field: 16px text, 10px padding top and bottom, 1px border */
+}
+input[type="date"].input::-webkit-date-and-time-value,
+input[type="time"].input::-webkit-date-and-time-value {
+  text-align: left;
+}
+input[type="number"].input {
+  height: 2.875rem;
+}
 @utility label {
   @apply mb-1 block text-sm font-medium text-brew;
 }

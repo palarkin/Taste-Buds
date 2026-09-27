@@ -131,11 +131,11 @@ export function TastingForm(props: TastingFormProps) {
           {!place && purchasedFrom && <p className="mt-1.5 text-xs text-stone-500">Saved as &ldquo;{purchasedFrom}&rdquo; without a map pin. Pick a suggestion to put it on the map.</p>}
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="label" htmlFor="purchasedOn">Picked up</label>
+          <div className="min-w-0">
+            <label className="label" htmlFor="purchasedOn">Picked up date</label>
             <input id="purchasedOn" type="date" className="input" value={purchasedOn} max={today()} onChange={(e) => setPurchasedOn(e.target.value)} />
           </div>
-          <div>
+          <div className="min-w-0">
             <label className="label" htmlFor="price">Price paid <span className="font-normal text-stone-400">($)</span></label>
             <input id="price" type="number" inputMode="decimal" step="0.01" min="0" className="input" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Optional" />
           </div>
