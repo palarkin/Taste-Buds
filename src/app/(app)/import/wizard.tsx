@@ -418,7 +418,7 @@ export function ImportWizard() {
                     <li key={p.r.row} className="flex flex-wrap items-center gap-3 px-3 py-2 text-sm">
                       <span className="flex-1 font-medium">{p.r.label}</span>
                       <span className="text-stone-500">log {formatRating(p.existing)} → sheet {formatRating(p.r.rating)}</span>
-                      <select className="rounded-lg border border-crema px-2 py-1" value={choice} onChange={(e) => setOverrides({ ...overrides, [p.key]: e.target.value as "keep" | "overwrite" })}>
+                      <select className="rounded-lg border border-crema px-2 py-1 text-base" value={choice} onChange={(e) => setOverrides({ ...overrides, [p.key]: e.target.value as "keep" | "overwrite" })}>
                         <option value="keep">Keep {formatRating(p.existing)}</option>
                         <option value="overwrite">Use {formatRating(p.r.rating)}</option>
                       </select>

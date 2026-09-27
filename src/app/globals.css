@@ -37,9 +37,27 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* The page never pans sideways on a phone: anything wider than the screen is clipped
+   (clip, unlike hidden, keeps the sticky header working), and long words or links wrap. */
+html,
+body {
+  overflow-x: clip;
+}
+
 body {
   background: var(--color-foam);
   color: var(--color-ink);
+  overflow-wrap: break-word;
+}
+
+/* iPhone Safari zooms in on any text field under 16px when it's tapped, and stays zoomed,
+   which lets the page slide left and right. Keep every field at 16px or more on touch screens. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"]),
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
 }
 
 /* shared form controls */

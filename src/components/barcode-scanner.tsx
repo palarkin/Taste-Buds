@@ -135,7 +135,7 @@ export function BarcodeScanner({ open, onClose, onResult }: { open: boolean; onC
           inputMode="numeric"
           placeholder="Or type the number under the barcode"
           aria-label="Barcode number"
-          className="h-12 flex-1 rounded-full bg-white/15 px-4 text-[15px] text-white placeholder:text-white/50 outline-none focus:bg-white/20"
+          className="h-12 flex-1 rounded-full bg-white/15 px-4 text-base text-white placeholder:text-white/50 outline-none focus:bg-white/20"
         />
         <button className="h-12 rounded-full bg-white px-5 text-[15px] font-semibold text-black disabled:opacity-40" disabled={!typed.trim() || phase === "looking"}>
           Look up
