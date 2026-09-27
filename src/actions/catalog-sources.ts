@@ -72,3 +72,29 @@ export async function runRetailerSync() {
     return { error: `Retailer sync failed: ${(e as Error).message}` };
   }
 }
+
+export async function previewRootBeerLists() {
+  await assertAdmin();
+  const { previewLists } = await import("@/lib/catalog-import/name-lists");
+  try {
+    return { preview: await previewLists() };
+  } catch (e) {
+    return { error: `Couldn't check the lists: ${(e as Error).message}` };
+  }
+}
+
+const listItem = z.object({
+  source: z.enum(["rootbeerrespect", "rootbeerrating", "mikebuffington"]),
+  title: z.string().min(2).max(160),
+  url: z.url().max(500),
+});
+
+export async function addRootBeerListItems(items: z.input<typeof listItem>[]) {
+  const user = await assertAdmin();
+  const parsed = z.array(listItem).max(1000).safeParse(items);
+  if (!parsed.success) return { error: "Invalid selection" };
+  const { addListItems } = await import("@/lib/catalog-import/name-lists");
+  const result = await addListItems(parsed.data, user.id);
+  revalidatePath("/", "layout");
+  return { result };
+}

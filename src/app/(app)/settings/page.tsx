@@ -4,6 +4,7 @@ import { listMembers } from "@/lib/queries";
 import { signOut } from "@/actions/auth";
 import { PageHeader } from "@/components/ui";
 import { AddMemberForm, CatalogSourceRow, DangerZone, MemberRow, PrivacyCard } from "./client";
+import { NameListImport } from "./name-lists";
 import { catalogSourceCounts, lastSync } from "@/lib/catalog-import";
 import { formatDate } from "@/lib/format";
 
@@ -75,6 +76,7 @@ export default async function SettingsPage() {
             canSync={user.isAdmin}
             status={retailSync ? (retailSync.status === "failed" ? `Last sync failed ${formatDate(retailSync.startedAt)}: ${retailSync.error}` : `Last synced ${formatDate(retailSync.startedAt)}${retailSync.by ? ` by ${retailSync.by}` : ""}`) : null}
           />
+          <NameListImport enabled={user.isAdmin} />
           <CatalogSourceRow
             source="communitymap"
             title="Community Root Beer Map"

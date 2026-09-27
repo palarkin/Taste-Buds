@@ -47,7 +47,7 @@ export default async function RootBeerPage(props: PageProps<"/r/[slug]">) {
             {rb.description && <p className="mt-3 text-stone-700">{rb.description}</p>}
             {rb.sourceUrl && (
               <a href={rb.sourceUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-sassafras-dark hover:underline">
-                {rb.source === "rootbeerbarrel" ? "Read Anthony's review" : rb.source === "openfoodfacts" ? "View on Open Food Facts" : "Source"}
+                {({ rootbeerbarrel: "Read Anthony's review", openfoodfacts: "View on Open Food Facts", rootbeerrespect: "Read on Root Beer Respect", rootbeerrating: "Read on Root Beer Rating", mikebuffington: "On Mike Buffington's list" } as Record<string, string>)[rb.source] ?? "Source"}
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>
             )}
