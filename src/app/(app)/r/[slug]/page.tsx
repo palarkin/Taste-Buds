@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { rootBeerAlias } from "@/lib/duplicates";
 import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { ExternalLink, MapPin, Pencil, Plus, UserRound } from "lucide-react";
@@ -24,7 +25,12 @@ export default async function RootBeerPage(props: PageProps<"/r/[slug]">) {
   const user = await requireUser();
   const { slug } = await props.params;
   const d = await rootBeerDetail(slug, user.id);
-  if (!d) notFound();
+  if (!d) {
+    // Merged into another entry by an admin: old links go to the kept one.
+    const alias = await rootBeerAlias({ slug });
+    if (alias) redirect(`/r/${alias.slug}`);
+    notFound();
+  }
   const { rb } = d;
   const title = displayName(rb);
   // At most 3 buy links (in stock, then cheapest per bottle) and 3 places (freshest reports first).

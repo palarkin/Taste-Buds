@@ -143,6 +143,11 @@ type Exec = Pick<typeof db, "select" | "insert" | "execute">;
 export async function resolvePlace(place: PlaceHit, userId: string, exec: Exec = db): Promise<string> {
   const [byId] = await exec.select({ id: schema.locations.id }).from(schema.locations).where(eq(schema.locations.externalId, place.externalId));
   if (byId) return byId.id;
+  const [merged] = await exec
+    .select({ id: schema.locationTombstones.mergedInto })
+    .from(schema.locationTombstones)
+    .where(eq(schema.locationTombstones.externalId, place.externalId));
+  if (merged?.id) return merged.id;
   const near = await exec.execute(sql`
     SELECT id, lat, lng FROM locations
     WHERE lower(name) = ${place.name.toLowerCase()}

@@ -90,7 +90,7 @@ export async function deleteLocation(id: string) {
   const [loc] = await db.select().from(schema.locations).where(eq(schema.locations.id, id));
   if (!loc) return { ok: true };
   // Pins that came from an outside map are remembered, so the next sync doesn't bring them back.
-  if (loc.externalId?.startsWith("rbmap:")) {
+  if (loc.externalId) {
     await db.insert(schema.locationTombstones).values({ externalId: loc.externalId, name: loc.name, deletedBy: user.id }).onConflictDoNothing();
   }
   await db.delete(schema.locations).where(eq(schema.locations.id, id));

@@ -37,6 +37,8 @@ export async function importVerifiedBreweries(userId: string): Promise<BreweryIm
     for (const loc of b.locations) {
       result.total++;
       const externalId = `obdb:${loc.obdbId}`;
+      const [tomb] = await db.select().from(schema.locationTombstones).where(eq(schema.locationTombstones.externalId, externalId));
+      if (tomb && !tomb.mergedInto) continue; // an admin deleted it
       // Already on the map? Same Open Brewery DB id, or same-ish name within ~250 m (e.g. from the community map).
       const near = await db.execute(sql`
         SELECT id FROM locations
@@ -44,7 +46,7 @@ export async function importVerifiedBreweries(userId: string): Promise<BreweryIm
            OR (abs(lat - ${loc.lat}) < 0.0025 AND abs(lng - ${loc.lng}) < 0.0035
                AND similarity(lower(name), ${loc.name.toLowerCase()}) > 0.35)
         LIMIT 1`);
-      let locationId = (near as unknown as { rows: { id: string }[] }).rows[0]?.id;
+      let locationId = tomb?.mergedInto ?? (near as unknown as { rows: { id: string }[] }).rows[0]?.id;
       if (locationId) {
         result.alreadyOnMap++;
       } else {

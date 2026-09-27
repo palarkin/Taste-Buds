@@ -109,7 +109,34 @@ export const locationTombstones = pgTable("location_tombstones", {
   name: text("name").notNull(),
   deletedBy: uuid("deleted_by").references(() => users.id, { onDelete: "set null" }),
   deletedAt: createdAt(),
+  // Set when the pin was merged into another place: re-adding it (search, sync) resolves to that place.
+  mergedInto: uuid("merged_into").references(() => locations.id, { onDelete: "set null" }),
 });
+
+// Catalog entries an admin merged away. Their name key and link now resolve to the kept entry,
+// so syncs don't re-create them and old /r/<slug> links still work.
+export const rootBeerAliases = pgTable("root_beer_aliases", {
+  searchKey: text("search_key").primaryKey(),
+  slug: text("slug").unique(),
+  rootBeerId: uuid("root_beer_id")
+    .notNull()
+    .references(() => rootBeers.id, { onDelete: "cascade" }),
+  mergedBy: uuid("merged_by").references(() => users.id, { onDelete: "set null" }),
+  createdAt: createdAt(),
+});
+
+// Pairs an admin marked "not duplicates", so the review list stops suggesting them. a_id < b_id.
+export const duplicateDismissals = pgTable(
+  "duplicate_dismissals",
+  {
+    kind: text("kind").notNull(), // "place" | "rootbeer"
+    aId: uuid("a_id").notNull(),
+    bId: uuid("b_id").notNull(),
+    dismissedBy: uuid("dismissed_by").references(() => users.id, { onDelete: "set null" }),
+    createdAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.kind, t.aId, t.bId] })],
+);
 
 // History of syncs from outside sources, with a raw copy of what was downloaded (our backup of their data).
 export const sourceSyncs = pgTable("source_syncs", {

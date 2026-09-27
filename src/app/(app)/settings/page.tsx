@@ -43,6 +43,16 @@ export default async function SettingsPage() {
         </div>
       </section>
 
+      {user.isAdmin && (
+        <section className="card p-5">
+          <h2 className="font-display text-xl font-semibold text-brew-dark">Duplicates</h2>
+          <p className="text-sm text-stone-500">Places and root beers that look like they&apos;re listed twice. Merge them, delete one, or mark them as different.</p>
+          <div className="mt-3">
+            <Link href="/settings/duplicates" className="btn-secondary">Review duplicates</Link>
+          </div>
+        </section>
+      )}
+
       <section className="card p-5">
         <h2 className="font-display text-xl font-semibold text-brew-dark">Catalog sources</h2>
         <p className="text-sm text-stone-500">

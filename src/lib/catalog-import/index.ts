@@ -1,8 +1,9 @@
 import "server-only";
-import { and, count, desc, eq, inArray, or, sql } from "drizzle-orm";
+import { and, count, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { uniqueSlug } from "@/lib/catalog";
 import { normalizeName, searchKey } from "@/lib/normalize";
+import { rootBeerAlias } from "@/lib/duplicates";
 import { fromOpenFoodFacts, fromRootBeerBarrel, normalizeBarcode, type CatalogCandidate } from "./parse";
 import { photoMatches } from "./retail-parse";
 
@@ -25,7 +26,12 @@ function photoFields(photo: PhotoCandidate | null | undefined, entry: { brand: s
 
 export async function upsertCatalogEntry(e: Entry, source: string, userId: string | null): Promise<{ id: string; status: "created" | "updated" | "unchanged"; barcodes: number }> {
   const key = searchKey(e.brand, e.name);
-  const [existing] = await db.select().from(schema.rootBeers).where(eq(schema.rootBeers.searchKey, key));
+  let [existing] = await db.select().from(schema.rootBeers).where(eq(schema.rootBeers.searchKey, key));
+  if (!existing) {
+    // An admin merged this name into another entry: update that one instead of re-creating it.
+    const alias = await rootBeerAlias({ searchKey: key });
+    if (alias) [existing] = await db.select().from(schema.rootBeers).where(eq(schema.rootBeers.id, alias.id));
+  }
   let id: string;
   let status: "created" | "updated" | "unchanged" = "unchanged";
 
@@ -271,7 +277,7 @@ export async function catalogSourceCounts() {
   const [{ n: communityPins }] = await db.select({ n: count() }).from(schema.locations).where(sql`${schema.locations.externalId} LIKE 'rbmap:%'`);
   const [{ n: allPlaces }] = await db.select({ n: count() }).from(schema.locations);
   const [{ n: breweryPins }] = await db.select({ n: count() }).from(schema.locations).where(sql`${schema.locations.externalId} LIKE 'obdb:%'`);
-  const [{ n: dismissedPins }] = await db.select({ n: count() }).from(schema.locationTombstones);
+  const [{ n: dismissedPins }] = await db.select({ n: count() }).from(schema.locationTombstones).where(isNull(schema.locationTombstones.mergedInto));
   return {
     bySource: Object.fromEntries(rows.map((r) => [r.source, r.n])) as Record<string, number>,
     barcodes,
