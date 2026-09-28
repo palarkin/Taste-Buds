@@ -6,7 +6,7 @@ import { z } from "zod";
 import { db, schema } from "@/db";
 import { assertUser } from "@/lib/session";
 import { today } from "@/lib/format";
-import { resolvePlace, searchPlaces } from "@/lib/places";
+import { resolvePlace, searchAreas, searchPlaces } from "@/lib/places";
 
 // ---------- purchase links (R5) ----------
 
@@ -168,4 +168,11 @@ export async function addPlace(input: z.input<typeof placeHit>) {
   const id = await resolvePlace(parsed.data, user.id);
   revalidatePath("/map");
   return { id } as const;
+}
+
+/** Map search: jump to a city, state/province, zip or postal code, county or country. */
+export async function findAreas(q: string, near: { lat: number; lng: number } | null = null) {
+  await assertUser();
+  if (q.trim().length < 2) return [];
+  return searchAreas(q.trim().slice(0, 120), nearInput.parse(near));
 }

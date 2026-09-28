@@ -11,6 +11,7 @@ const STYLE = "https://tiles.openfreemap.org/styles/liberty";
 const FONT = ["Noto Sans Bold"];
 
 type Point = { lat: number; lng: number };
+export type FitArea = { lat: number; lng: number; bbox: [number, number, number, number] | null };
 
 export default function MapCanvas({
   locations,
@@ -21,6 +22,8 @@ export default function MapCanvas({
   dropPin,
   onMapClick,
   addMode,
+  fitArea,
+  centerRef,
 }: {
   locations: MapLocation[];
   selectedId: string | null;
@@ -30,6 +33,8 @@ export default function MapCanvas({
   dropPin: Point | null;
   onMapClick: (p: Point) => void;
   addMode: boolean;
+  fitArea: FitArea | null;
+  centerRef?: { current: Point | null }; // kept up to date with the map's center (biases area search)
 }) {
   const ref = useRef<MapRef>(null);
   const [hovering, setHovering] = useState(false);
@@ -67,6 +72,17 @@ export default function MapCanvas({
     if (flyTo) ref.current?.flyTo({ center: [flyTo.lng, flyTo.lat], zoom: Math.max(ref.current.getZoom(), 12), duration: 900 });
   }, [flyTo]);
 
+  // Searched area: fit the whole city/state/country on screen; a point-only result gets a city-level zoom.
+  useEffect(() => {
+    if (!fitArea || !ref.current) return;
+    if (fitArea.bbox) {
+      const [w, s, e, n] = fitArea.bbox;
+      ref.current.fitBounds([[w, s], [e, n]], { padding: 40, maxZoom: 13, duration: 900 });
+    } else {
+      ref.current.flyTo({ center: [fitArea.lng, fitArea.lat], zoom: 11, duration: 900 });
+    }
+  }, [fitArea]);
+
   async function handleClick(e: MapLayerMouseEvent) {
     const f = e.features?.[0];
     if (!f || addMode) {
@@ -96,6 +112,8 @@ export default function MapCanvas({
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       onClick={handleClick}
+      onLoad={(e) => centerRef && (centerRef.current = { lat: e.target.getCenter().lat, lng: e.target.getCenter().lng })}
+      onMoveEnd={(e) => centerRef && (centerRef.current = { lat: e.viewState.latitude, lng: e.viewState.longitude })}
       attributionControl={{ compact: true }}
     >
       <NavigationControl position="top-right" showCompass={false} />

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Crosshair, ExternalLink, Heart, List, Loader2, MapPin, Plus, Trash2, X } from "lucide-react";
 import type { MapLocation } from "@/lib/queries";
@@ -16,6 +16,8 @@ import { FreshnessLabel, RatingBadge } from "@/components/ui";
 import { RootBeerPicker, type PickedRootBeer } from "@/components/root-beer-picker";
 import { FilterIconButton, FilterSheet } from "@/components/filter-sheet";
 import { activeFilterLabels, option, type FilterSection } from "@/lib/filters";
+import { AreaSearch } from "./area-search";
+import type { FitArea } from "./map-canvas";
 
 const MapCanvas = dynamic(() => import("./map-canvas"), {
   ssr: false,
@@ -63,6 +65,9 @@ export function MapExplorer({ locations, initialSelectedId, isAdmin }: { locatio
   const [geoError, setGeoError] = useState<string | null>(null);
   const [adding, setAdding] = useState<null | { point?: Point; name?: string; address?: string }>(null);
   const [flyTo, setFlyTo] = useState<Point | null>(null);
+  const [fitArea, setFitArea] = useState<FitArea | null>(null);
+  const centerRef = useRef<Point | null>(null);
+  const getCenter = useCallback(() => centerRef.current, []);
 
   const visible = useMemo(
     () =>
@@ -116,17 +121,20 @@ export function MapExplorer({ locations, initialSelectedId, isAdmin }: { locatio
 
   return (
     <div className="-mx-4 -mt-5 flex h-[calc(100dvh-3.5rem-4.5rem)] flex-col md:-mb-12 md:h-[calc(100dvh-3.5rem)] lg:-mx-6">
-      <div className="z-10 flex items-center gap-2 border-b border-crema bg-foam px-4 py-2">
+      <div className="z-20 flex items-center gap-2 border-b border-crema bg-foam px-4 py-2">
+        <AreaSearch
+          getCenter={getCenter}
+          onPick={(a) => {
+            setSelectedId(null);
+            setFitArea({ lat: a.lat, lng: a.lng, bbox: a.bbox });
+          }}
+        />
         <FilterIconButton count={activeFilterLabels(MAP_FILTERS, filterValues).length} onClick={() => setFiltersOpen(true)} />
-        <p className="min-w-0 flex-1 truncate text-sm text-stone-500">
-          {visible.length} place{visible.length === 1 ? "" : "s"}
-          {activeFilterLabels(MAP_FILTERS, filterValues).map((l) => ` · ${l}`)}
-        </p>
-        <button onClick={locate} className="btn-secondary h-11 shrink-0 whitespace-nowrap rounded-full px-4" disabled={locating} aria-label="What's around me">
+        <button onClick={locate} className="btn-secondary h-11 w-11 shrink-0 whitespace-nowrap rounded-full px-0 sm:w-auto sm:px-4" disabled={locating} aria-label="What's around me" title="What's around me">
           {locating ? <Loader2 className="h-4 w-4 animate-spin" /> : <Crosshair className="h-4 w-4" />}
-          <span className="hidden sm:inline">What&apos;s around me</span><span className="sm:hidden">Near me</span>
+          <span className="hidden sm:inline">What&apos;s around me</span>
         </button>
-        <button onClick={() => { setAdding({}); setSelectedId(null); }} className="btn-primary h-11 shrink-0 whitespace-nowrap rounded-full px-4" aria-label="Add place">
+        <button onClick={() => { setAdding({}); setSelectedId(null); }} className="btn-primary h-11 w-11 shrink-0 whitespace-nowrap rounded-full px-0 sm:w-auto sm:px-4" aria-label="Add place" title="Add place">
           <Plus className="h-4 w-4" /> <span className="hidden sm:inline">Add place</span>
         </button>
       </div>
@@ -141,9 +149,15 @@ export function MapExplorer({ locations, initialSelectedId, isAdmin }: { locatio
           dropPin={adding?.point ?? null}
           onMapClick={(p) => adding && setAdding({ ...adding, point: p })}
           addMode={!!adding}
+          fitArea={fitArea}
+          centerRef={centerRef}
         />
 
-        <div className="pointer-events-none absolute left-2 top-2 flex flex-wrap gap-x-3 gap-y-0.5 rounded-lg bg-white/90 px-2.5 py-1.5 text-[11px] text-stone-700 shadow">
+        <div className="pointer-events-none absolute left-2 top-2 mr-14 flex flex-wrap gap-x-3 gap-y-0.5 rounded-lg bg-white/90 px-2.5 py-1.5 text-[11px] text-stone-700 shadow">
+          <span className="font-semibold text-stone-800">
+            {visible.length.toLocaleString()} place{visible.length === 1 ? "" : "s"}
+            {activeFilterLabels(MAP_FILTERS, filterValues).map((l) => ` · ${l}`)}
+          </span>
           <span className="flex items-center gap-1" title="Has something you haven't tried"><Dot status="untried" /> New to you {counts.untried}</span>
           <span className="flex items-center gap-1" title="You've tried everything known here"><Dot status="tried" /> All tried {counts.tried}</span>
           <span className="flex items-center gap-1" title="Carries root beer, but nobody has logged which brands yet"><Dot status="unknown" /> Brands not logged {counts.unknown}</span>
