@@ -266,7 +266,7 @@ export function Switch({ checked, onChange, label }: { checked: boolean; onChang
 /** "12 shown · Haven't tried · Craft   Clear" line under a list. */
 export function FilterSummary({ count, labels, clearHref }: { count: number; labels: string[]; clearHref: string }) {
   return (
-    <p className="mb-3 flex flex-wrap items-center gap-x-2 text-sm text-stone-500">
+    <p className="mb-3 flex flex-wrap items-center gap-x-2 text-[13px] text-stone-500">
       <span>{count} shown</span>
       {labels.map((l) => (
         <span key={l} className="before:mr-2 before:content-['·']">{l}</span>

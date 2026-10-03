@@ -21,10 +21,10 @@ export function today(): string {
 
 /** Warm-to-cool colour for a 0–10 rating. */
 export function ratingColor(r: number): string {
-  if (r >= 8.5) return "bg-emerald-600 text-white";
-  if (r >= 7) return "bg-lime-600 text-white";
+  if (r >= 8.5) return "bg-emerald-700 text-white";
+  if (r >= 7) return "bg-lime-700 text-white";
   if (r >= 5) return "bg-amber-500 text-stone-900";
-  if (r >= 3) return "bg-orange-600 text-white";
+  if (r >= 3) return "bg-orange-700 text-white";
   return "bg-red-700 text-white";
 }
 

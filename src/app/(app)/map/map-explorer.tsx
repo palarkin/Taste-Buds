@@ -120,7 +120,7 @@ export function MapExplorer({ locations, initialSelectedId, isAdmin }: { locatio
   };
 
   return (
-    <div className="-mx-4 -mt-5 flex h-[calc(100dvh-3.5rem-4.5rem)] flex-col md:-mb-12 md:h-[calc(100dvh-3.5rem)] lg:-mx-6">
+    <div className="-mx-4 -mt-6 flex h-[calc(100dvh-3.5rem-4.5rem)] flex-col md:-mb-12 md:h-[calc(100dvh-3.5rem)] lg:-mx-6">
       <div className="z-20 flex items-center gap-2 border-b border-crema bg-foam px-4 py-2">
         <AreaSearch
           getCenter={getCenter}

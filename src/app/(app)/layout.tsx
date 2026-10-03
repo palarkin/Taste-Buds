@@ -12,18 +12,18 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           <Link href="/log" className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/icon.svg" alt="" className="h-8 w-8" />
-            <span className="font-display text-xl font-semibold text-brew-dark">Taste Buds</span>
+            <span className="sr-only font-display text-xl font-semibold text-brew-dark md:not-sr-only">Taste Buds</span>
           </Link>
           <TopNav />
           <div className="ml-auto flex items-center gap-2">
             <Link href="/log/new" className="btn-primary hidden py-2 md:inline-flex">+ Log a root beer</Link>
-            <Link href="/settings" className="rounded-full" aria-label="Settings">
+            <Link href="/settings" className="flex h-11 w-11 items-center justify-center rounded-full" aria-label="Settings">
               <Avatar name={user.name} color={user.color} />
             </Link>
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-screen-2xl flex-1 px-4 pb-28 pt-5 md:pb-12 lg:px-6">{children}</main>
+      <main className="mx-auto w-full max-w-screen-2xl flex-1 px-4 pb-28 pt-6 md:pb-12 lg:px-6">{children}</main>
       <BottomTabs />
     </div>
   );

@@ -11,7 +11,7 @@ export function SearchInput({ name, defaultValue, placeholder }: { name: string;
         defaultValue={defaultValue}
         placeholder={placeholder}
         aria-label={placeholder}
-        className="h-11 w-full rounded-full border border-crema bg-white pl-10 pr-4 text-base text-ink shadow-sm outline-none placeholder:text-stone-400 focus:border-sassafras focus:ring-2 focus:ring-sassafras/25"
+        className="h-11 w-full rounded-full border border-crema bg-white pl-10 pr-4 text-[17px] text-ink shadow-sm outline-none placeholder:text-stone-500 focus:border-sassafras focus:ring-2 focus:ring-sassafras/25"
       />
     </div>
   );

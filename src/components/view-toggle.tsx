@@ -32,7 +32,7 @@ export function ViewToggle({ scope, value }: { scope: "log" | "directory"; value
   );
 
   return (
-    <div role="radiogroup" aria-label="View" className="inline-flex h-11 shrink-0 items-center gap-0.5 rounded-full border border-crema bg-white p-[3px]">
+    <div role="radiogroup" aria-label="View" className="inline-flex h-11 shrink-0 items-center gap-1 rounded-full border border-crema bg-white p-1">
       {btn("cards", "Card view", LayoutGrid)}
       {btn("list", "List view", List)}
     </div>

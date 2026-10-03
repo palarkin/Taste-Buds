@@ -5,7 +5,7 @@ export function RatingBadge({ rating, size = "md", label }: { rating: number | n
   if (rating == null) {
     return <span className="inline-flex items-center rounded-lg bg-stone-100 px-2 py-0.5 text-sm font-semibold text-stone-400">–</span>;
   }
-  const cls = size === "lg" ? "min-w-14 px-3 py-1.5 text-2xl" : size === "sm" ? "min-w-8 px-1.5 py-0.5 text-xs" : "min-w-10 px-2 py-1 text-base";
+  const cls = size === "lg" ? "min-w-14 px-3 py-1.5 text-2xl" : size === "sm" ? "min-w-8 px-1.5 py-1 text-xs" : "min-w-10 px-2 py-1 text-[17px]";
   return (
     <span className={`inline-flex items-center justify-center rounded-xl font-display font-semibold tabular-nums ${ratingColor(rating)} ${cls}`} aria-label={`${label ?? "Rating"} ${formatRating(rating)} out of 10`}>
       {formatRating(rating)}
@@ -15,9 +15,9 @@ export function RatingBadge({ rating, size = "md", label }: { rating: number | n
 
 export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="font-display text-3xl font-semibold text-brew-dark">{title}</h1>
+        <h1 className="font-display text-[34px] leading-[41px] font-semibold text-brew-dark">{title}</h1>
         {subtitle && <p className="mt-1 text-sm text-stone-600">{subtitle}</p>}
       </div>
       {action}
@@ -65,7 +65,7 @@ export function FreshnessLabel({ date }: { date: string | null | undefined }) {
 /** Big image at the top of a card (4:3). Falls back to a warm placeholder when there's no photo. */
 export function CardImage({ url, kind, alt, children }: { url: string | null; kind?: "image" | "video" | null; alt: string; children?: ReactNode }) {
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden bg-gradient-to-br from-cream to-crema">
+    <div className={`relative aspect-[4/3] w-full overflow-hidden ${url ? "bg-white" : "bg-gradient-to-br from-cream to-crema"}`}>
       {url ? (
         kind === "video" ? (
           <video src={`${url}#t=0.1`} className="h-full w-full object-cover" muted playsInline preload="metadata" aria-label={alt} />
@@ -81,7 +81,7 @@ export function CardImage({ url, kind, alt, children }: { url: string | null; ki
   );
 }
 
-/** Responsive card grid: 1 across on small phones, 2 on large phones, 3 on normal screens, 4 on big screens. */
+/** Responsive card grid: 2 across on phones, 3 on normal screens, 4 on big screens. */
 export function CardGrid({ children }: { children: ReactNode }) {
-  return <ul className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4">{children}</ul>;
+  return <ul className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 2xl:grid-cols-4">{children}</ul>;
 }

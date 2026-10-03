@@ -15,7 +15,7 @@
   --color-brew-dark: #3f2213;
   --color-ink: #24160d;
 
-  --animate-sheet-in: sheet-in 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-sheet-in: sheet-in 280ms cubic-bezier(0.32, 0.72, 0, 1);
   --animate-pop-in: pop-in 200ms cubic-bezier(0.2, 0.9, 0.3, 1);
   --animate-fade-in: fade-in 200ms ease-out;
 
@@ -47,6 +47,7 @@ body {
 body {
   background: var(--color-foam);
   color: var(--color-ink);
+  font-size: 17px;
   overflow-wrap: break-word;
 }
 
@@ -84,7 +85,7 @@ input[type="number"].input {
   @apply mb-1 block text-sm font-medium text-brew;
 }
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[15px] font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
 }
 @utility btn-primary {
   @apply btn bg-brew text-foam shadow-sm hover:bg-brew-dark;
@@ -125,4 +126,14 @@ input[type="range"].rating-range::-moz-range-thumb {
   border-radius: 999px;
   background: white;
   border: 3px solid var(--color-brew);
+}
+
+/* Reduce Motion: motion becomes effectively instant for people who turn it off (Apple: "Make motion optional"). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
 }

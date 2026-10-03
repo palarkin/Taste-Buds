@@ -18,26 +18,26 @@ export function LogCards({ entries }: { entries: Entry[] }) {
         <li key={e.id}>
           <Link href={`/log/${e.id}`} className="card group flex h-full flex-col overflow-hidden transition hover:-translate-y-0.5 hover:border-sassafras/60 hover:shadow-md">
             <CardImage url={e.thumb_url} kind={e.thumb_kind} alt={displayName(e)}>
-              <div className="absolute right-2.5 top-2.5">
+              <div className="absolute right-3 top-3">
                 <RatingBadge rating={e.rating} />
               </div>
               {e.is_favorite && (
-                <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 p-1.5 shadow-sm">
+                <span className="absolute left-3 top-3 rounded-full bg-white/90 p-1.5 shadow-sm">
                   <Heart className="h-4 w-4 fill-rose-500 text-rose-500" aria-label="Favorite" />
                 </span>
               )}
               {e.media_count > 1 && (
-                <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-0.5 text-[11px] font-medium text-white">
+                <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-[11px] font-medium text-white">
                   <Film className="h-3 w-3" /> {e.media_count}
                 </span>
               )}
             </CardImage>
-            <div className="flex flex-1 flex-col p-3.5">
-              <p className="font-semibold leading-snug text-ink">{displayName(e)}</p>
-              <p className="mt-0.5 text-xs text-stone-500">{[when(e), e.style].filter(Boolean).join(" · ")}</p>
-              <p className="mt-2 line-clamp-2 text-sm text-stone-600">{e.notes || <span className="italic text-stone-400">No notes</span>}</p>
+            <div className="flex flex-1 flex-col p-4">
+              <p className="text-[17px] leading-[22px] font-semibold text-ink">{displayName(e)}</p>
+              <p className="mt-1 text-[13px] text-stone-500">{[when(e), e.style].filter(Boolean).join(" · ")}</p>
+              {e.notes && <p className="mt-2 line-clamp-2 text-[15px] leading-5 text-stone-600">{e.notes}</p>}
               {where(e) && (
-                <p className="mt-auto flex items-center gap-1 pt-2 text-xs text-stone-500">
+                <p className="mt-auto flex items-center gap-1 pt-2 text-[13px] text-stone-500">
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-sassafras" />
                   <span className="truncate">{where(e)}</span>
                 </p>

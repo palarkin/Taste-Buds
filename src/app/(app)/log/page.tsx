@@ -85,14 +85,12 @@ export default async function LogPage(props: PageProps<"/log">) {
     <>
       <PageHeader
         title="My Log"
-        action={<Link href="/import" className="btn-secondary py-2"><Upload className="h-4 w-4" /> Import</Link>}
+        action={<Link href="/import" className="btn-secondary"><Upload className="h-4 w-4" /> Import</Link>}
       />
 
-      <div className="mb-5 grid grid-cols-3 gap-3">
-        <Stat label="Tasted" value={String(all.length)} />
-        <Stat label="My average" value={formatRating(avg ? Math.round(avg * 10) / 10 : null)} />
-        <Stat label="Favorites" value={String(favs)} />
-      </div>
+      <p className="mb-4 text-[15px] text-stone-600">
+        {all.length} tasted · {formatRating(avg ? Math.round(avg * 10) / 10 : null)} average · {favs} favorite{favs === 1 ? "" : "s"}
+      </p>
 
       <div className="mb-3 flex items-center gap-2">
         <form className="flex-1" action="/log">
@@ -102,7 +100,9 @@ export default async function LogPage(props: PageProps<"/log">) {
         <UrlFilterButton sections={FILTERS} values={filters} />
         <ViewToggle scope="log" value={view} />
       </div>
-      <FilterSummary count={entries.length} labels={activeFilterLabels(FILTERS, filters)} clearHref={q ? `/log?q=${encodeURIComponent(q)}` : "/log"} />
+      {(q || activeFilterLabels(FILTERS, filters).length > 0) && (
+        <FilterSummary count={entries.length} labels={activeFilterLabels(FILTERS, filters)} clearHref={q ? `/log?q=${encodeURIComponent(q)}` : "/log"} />
+      )}
 
       {entries.length === 0 ? (
         <p className="py-10 text-center text-stone-500">Nothing in your log matches{q ? <> &ldquo;{q}&rdquo;</> : " these filters"}.</p>
@@ -114,14 +114,5 @@ export default async function LogPage(props: PageProps<"/log">) {
         )
       )}
     </>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="card px-3 py-3 text-center">
-      <p className="font-display text-2xl font-semibold text-brew-dark">{value}</p>
-      <p className="text-xs font-medium uppercase tracking-wide text-stone-500">{label}</p>
-    </div>
   );
 }
